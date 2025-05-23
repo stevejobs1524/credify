@@ -1,1 +1,8 @@
+fastapi
+uvicorn
+instaloader
+torch
+torch-geometric
+nest_asyncio
+pydantic
 
