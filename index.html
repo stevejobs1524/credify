@@ -3,12 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CrediFy - Username Verification</title>
-  <link rel="stylesheet" href="styles.css"> <!-- Link to your styles -->
+  <title>CrediFy - Instagram Username Verification</title>
+  <style>
+    /* CSS for styling the page */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      margin: 50px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #result {
+      margin-top: 20px;
+    }
+
+    #statusMessage {
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>CrediFy - Verify Instagram Username</h1>
+    <h1>CrediFy - Instagram Username Verification</h1>
     
     <!-- Form to input username -->
     <form id="usernameForm" onsubmit="event.preventDefault(); checkUsername();">
@@ -22,6 +76,40 @@
     </div>
   </div>
 
-  <script src="script.js"></script> <!-- Link to your JavaScript -->
+  <script>
+    // JavaScript to handle the form submission and call the Netlify Function
+    async function checkUsername() {
+      const username = document.getElementById("usernameInput").value; // Get username from input
+
+      if (username === "") {
+        alert("Please enter a username.");
+        return;
+      }
+
+      try {
+        // Call Netlify function to check the username by making a POST request
+        const response = await fetch("/.netlify/functions/verifyUsername", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: username }), // Send the username to the Netlify function
+        });
+
+        const data = await response.json(); // Get the response from Netlify Function
+
+        // Display the result
+        if (data.status) {
+          document.getElementById("statusMessage").innerText = `The username is ${data.status}`;
+        } else {
+          document.getElementById("statusMessage").innerText = "Could not verify the username. Please try again.";
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        document.getElementById("statusMessage").innerText = "An error occurred while checking the username.";
+      }
+    }
+  </script>
+
 </body>
 </html>
