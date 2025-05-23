@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrediFy Dashboard</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body and general styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #0e0f11;
+            color: #E8E8E8;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #1c1f23;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.7);
+            color: #7d8c93;
+            position: relative;
+        }
+
+        .sidebar h2 {
+            color: #00B5FF;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar ul li a {
+            color: #7d8c93;
+            text-decoration: none;
+            font-size: 20px;
+            display: block;
+            padding: 10px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar ul li a:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #00B5FF;
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        .sidebar ul li a:hover:before {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Main content area */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            background-color: #181a1f;
+            overflow-y: scroll;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header styling */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 10px;
+        }
+
+        header h1 {
+            color: #E8E8E8;
+            font-size: 26px;
+        }
+
+        header button {
+            background-color: #00B5FF;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        header button:hover {
+            background-color: #0092c6;
+        }
+
+        /* Dashboard cards */
+        .dashboard {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: #252c34;
+            border-radius: 12px;
+            padding: 30px;
+            flex: 1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            color: #E8E8E8;
+            position: relative;
+        }
+
+        .card h3 {
+            font-size: 24px;
+            color: #00B5FF;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 36px;
+            color: #E8E8E8;
+            font-weight: bold;
+        }
+
+        /* Chart area */
+        .chart-area {
+            margin-top: 40px;
+        }
+
+        .chart {
+            background-color: #252c34;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .chart h3 {
+            color: #00B5FF;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Ambient glowing effect */
+        .card, .sidebar ul li a, header button {
+            transition: all 0.3s ease;
+        }
+
+        .card:hover, .sidebar ul li a:hover, header button:hover {
+            box-shadow: 0 0 20px rgba(0, 181, 255, 0.8), 0 0 50px rgba(0, 181, 255, 0.6);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>CrediFy</h2>
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Logs</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <header>
+            <div class="header-left">
+                <h1>Welcome Back, User!</h1>
+            </div>
+            <div class="header-right">
+                <button>Logout</button>
+            </div>
+        </header>
+
+        <section class="dashboard">
+            <div class="card">
+                <h3>Fake Accounts Detected</h3>
+                <p>245</p>
+            </div>
+            <div class="card">
+                <h3>Accuracy</h3>
+                <p>92%</p>
+            </div>
+        </section>
+
+        <section class="chart-area">
+            <div class="chart">
+                <h3>Account Detection Progress</h3>
+                <!-- Insert graph/chart here -->
+            </div>
+        </section>
+    </div>
+</body>
+</html>
