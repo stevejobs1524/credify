@@ -1,8 +1,4 @@
-fastapi
-uvicorn
-instaloader
-torch
-torch-geometric
-nest_asyncio
-pydantic
-
+fastapi==0.68.1
+uvicorn==0.15.0
+instaloader==4.9.3
+pydantic==1.8.2
