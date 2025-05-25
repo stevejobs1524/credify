@@ -1,40 +1,32 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import instaloader
+import requests
 
 app = FastAPI()
 
-# Define input format
-class Username(BaseModel):
+class InstagramRequest(BaseModel):
     username: str
 
-# Initialize instaloader
-L = instaloader.Instaloader()
-
-def check_account(username: str) -> dict:
+@app.post("/verify_account/")
+async def verify_account(request: InstagramRequest):
     try:
-        profile = instaloader.Profile.from_username(L.context, username)
-        
-        # You can add more checks based on profile attributes
-        account_data = {
-            'username': profile.username,
-            'followers': profile.followers,
-            'posts': profile.mediacount,
-            'is_private': profile.is_private,
-            'is_verified': profile.is_verified,
-            'profile_pic': profile.profile_pic_url,
-        }
-        
-        # Basic check for fake accounts
-        if profile.followers < 100 or profile.mediacount < 5:
-            return {'status': 'Fake', 'details': account_data}
-        return {'status': 'Real', 'details': account_data}
-    
-    except Exception as e:
-        raise HTTPException(status_code=404, detail="User not found or error with Instagram data")
+        # Initialize Instaloader
+        loader = instaloader.Instaloader()
 
-# Define endpoint to verify Instagram account
-@app.post("/verify")
-async def verify_account(username: Username):
-    result = check_account(username.username)
-    return result
+        # Fetch the profile using the provided username
+        profile = instaloader.Profile.from_username(loader.context, request.username)
+
+        # Check if the profile has a valid 'is_private' attribute
+        if profile.is_private:
+            return {"status": "Account is private", "is_fake": False}
+
+        # If the profile is public, verify authenticity using followers count (sample logic)
+        if profile.followers < 100:  # Example: threshold followers count for checking authenticity
+            return {"status": "Account seems suspicious (low followers)", "is_fake": True}
+
+        return {"status": "Account is verified", "is_fake": False}
+
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=f"Error verifying account: {str(e)}")
+
