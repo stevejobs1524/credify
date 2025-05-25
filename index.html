@@ -1,56 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check Username</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
-        #result {
-            margin-top: 20px;
-            font-weight: bold;
-        }
-        .error {
-            color: red;
-        }
-        .success {
-            color: green;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CrediFy - Fake Account Detector</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #f1f1f1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2em;
+      color: #00ffaa;
+    }
+
+    .input-box {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      padding: 10px;
+      width: 250px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #00ffaa;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #121212;
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #ff4757;
+    }
+
+    #result.valid {
+      color: #2ed573;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Check if the Username is Real or Fake</h1>
+  <h1>CrediFy: Detect Fake Instagram Accounts</h1>
 
-    <!-- Form to take input -->
-    <form id="usernameForm">
-        <input type="text" id="usernameInput" placeholder="Enter Instagram Username" required />
-        <button type="submit">Check</button>
-    </form>
+  <div class="input-box">
+    <input type="text" id="username" placeholder="Enter Instagram Username" />
+    <button onclick="checkUsername()">Check</button>
+  </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const form = document.getElementById("usernameForm");
-            const usernameInput = document.getElementById("usernameInput");
+  <div id="result"></div>
 
-            form.addEventListener("submit", function (e) {
-                e.preventDefault();
-                const username = usernameInput.value.trim();
+  <div class="footer">Powered by CrediFy | Render + Netlify</div>
 
-                if (username === "") {
-                    alert("Please enter a username.");
-                    return;
-                }
+  <script>
+    async function checkUsername() {
+      const username = document.getElementById("username").value.trim();
+      const resultDiv = document.getElementById("result");
 
-                // Redirect to result page with the username as a query parameter
-                window.location.href = `result.html?username=${username}`;
-            });
+      if (!username) {
+        resultDiv.textContent = "Please enter a username.";
+        resultDiv.className = "";
+        return;
+      }
+
+      resultDiv.textContent = "Checking...";
+      resultDiv.className = "";
+
+      try {
+        const response = await fetch("https://credify-oq79.onrender.com/checkUsername", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username }),
         });
-    </script>
+
+        const data = await response.json();
+
+        if (data.isFake === true) {
+          resultDiv.textContent = `${username} is a FAKE account ❌`;
+          resultDiv.className = "";
+        } else if (data.isFake === false) {
+          resultDiv.textContent = `${username} is a REAL account ✅`;
+          resultDiv.className = "valid";
+        } else {
+          resultDiv.textContent = "Unexpected response. Try again.";
+          resultDiv.className = "";
+        }
+      } catch (error) {
+        console.error(error);
+        resultDiv.textContent = "Failed to reach server. Try again later.";
+        resultDiv.className = "";
+      }
+    }
+  </script>
 
 </body>
 </html>
